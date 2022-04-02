@@ -10,7 +10,7 @@ export default function Home() {
         <meta name="keywords" content="Extract text from image, OCR" />
 
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://ImageReader.vercel.app/" />
+        <meta property="og:url" content="https://image-reader.vercel.app/" />
         <meta property="og:title" content="ImageReader" />
         <meta property="og:description" content="Extract text from image" />
         <meta property="og:image" content="/imagereader-og.png" />
@@ -22,7 +22,7 @@ export default function Home() {
         <meta name="twitter:image" content="/imagereader-og.png" />
         <meta name="twitter:alt" content="ImageReader" />
 
-        <link rel="canonical" href="https://ImageReader.vercel.app/" />
+        <link rel="canonical" href="https://image-reader.vercel.app/" />
         <link rel="apple-touch-icon" sizes="180x180" href="/favicons/apple-touch-icon.png" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicons/32x32.png" />
         <link rel="icon" type="image/png" sizes="16x16" href="/favicons/16x16.png" />

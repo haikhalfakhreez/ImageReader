@@ -2,7 +2,9 @@
 
 Extract text from image using Optical Character Recognition (OCR) technology.
 
-### Tools
+[Go live](https://image-reader.vercel.app/)
+
+### Tools Used
 
 - [Tesseract.js](https://github.com/naptha/tesseract.js)
 - [Next.js](https://nextjs.org/)
