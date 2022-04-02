@@ -1,16 +1,15 @@
-html,
-body {
-  padding: 0;
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+progress[value]::-moz-progress-bar,
+progress::-webkit-progress-bar,
+progress[value]::-webkit-progress-bar {
+  @apply rounded bg-blue-100;
+  border-radius: 10px;
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
-}
-
-* {
-  box-sizing: border-box;
+progress[value]::-webkit-progress-value {
+  @apply bg-blue-600;
+  border-radius: 10px;
 }
