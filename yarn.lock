@@ -1047,6 +1047,11 @@
   dependencies:
     "function-bind" "^1.1.1"
 
+"heic2any@^0.0.3":
+  "integrity" "sha512-1KG0LzZuIPiqyJjwLgGlgrgWd3UBwUE9g5+tOuHy8PbeH2hF0U4gc4ZWT4ChlCmcdISr1xVRimSehsTOPdRXnQ=="
+  "resolved" "https://registry.npmjs.org/heic2any/-/heic2any-0.0.3.tgz"
+  "version" "0.0.3"
+
 "idb-keyval@^3.2.0":
   "integrity" "sha512-slx8Q6oywCCSfKgPgL0sEsXtPVnSbTLWpyiDcu6msHOyKOLari1TD1qocXVCft80umnkk3/Qqh3lwoFt8T/BPQ=="
   "resolved" "https://registry.npmjs.org/idb-keyval/-/idb-keyval-3.2.0.tgz"

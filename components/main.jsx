@@ -13,30 +13,53 @@ export default function Home() {
   const [copyText, setCopyText] = useState('Copy')
   const fileInput = useRef(null)
 
-  const worker = createWorker({
-    logger: (m) => {
-      const { status, progress, userJobId, workerId } = m
+  function makeWorker() {
+    return createWorker({
+      logger: (m) => {
+        const { status, progress, userJobId, workerId } = m
 
-      let currentJourneyId = '1'
-      Object.entries(journeyStatuses).forEach(([key, value]) => {
-        if (value.includes(status)) {
-          currentJourneyId = key
-        }
-      })
+        let currentJourneyId = '1'
+        Object.entries(journeyStatuses).forEach(([key, value]) => {
+          if (value.includes(status)) {
+            currentJourneyId = key
+          }
+        })
 
-      setJourney((prevObject) => ({
-        ...prevObject,
-        [currentJourneyId]: {
-          ...prevObject[currentJourneyId],
-          progress: progress,
-        },
-      }))
-    },
-  })
+        setJourney((prevObject) => ({
+          ...prevObject,
+          [currentJourneyId]: {
+            ...prevObject[currentJourneyId],
+            progress: progress,
+          },
+        }))
+      },
+    })
+  }
+
+  async function convertHeic(blob) {
+    const heic2any = require('heic2any')
+    if (typeof window !== 'undefined') {
+      if (!blob) return false
+
+      try {
+        const name = blob.name.replace(/.heic/i, '')
+        const convertedBlob = await heic2any({ blob, toType: 'image/jpeg', quality: 0.25 })
+        const file = new File([convertedBlob], `${name}.jpeg`, {
+          type: 'image/jpeg',
+          lastModified: new Date().getTime(),
+        })
+
+        return file
+      } catch (e) {
+        console.error('Error in image conversion: ', e)
+        return false
+      }
+    }
+  }
 
   async function doOCR() {
     setLoading(true)
-    const img = fileInput.current.files[0]
+    let img = fileInput.current.files[0]
 
     if (!img) {
       setError(true)
@@ -45,8 +68,16 @@ export default function Home() {
       return
     }
 
+    if (img.type === 'image/heic') {
+      console.log('b4', img)
+      img = await convertHeic(img)
+      console.log('after', img)
+    }
+
     setError(false)
     setOcr(null)
+
+    const worker = makeWorker()
     await worker.load()
     await worker.loadLanguage('eng')
     await worker.initialize('eng')
@@ -54,6 +85,8 @@ export default function Home() {
     const {
       data: { text, confidence },
     } = await worker.recognize(img)
+
+    await worker.terminate()
     setOcr(text)
     setAccuracy(confidence)
     setUploaded(false)
@@ -71,8 +104,16 @@ export default function Home() {
   }
 
   function onFileChange(event) {
+    setOcr(null)
+    setJourney(journeyData)
+    setAccuracy(0)
+    setLoading(false)
+    setError(false)
+    setUploaded(false)
+
     const file = event.target.files[0]
     const reader = new FileReader()
+
     reader.onload = () => {
       setUploaded(true)
     }
@@ -111,7 +152,14 @@ export default function Home() {
               className="inline-block bg-white text-black px-3 py-2 hover:bg-gray-100 text-xs font-medium h-full hover:cursor-pointer"
             >
               <span>Upload</span>
-              <input id="fileInput" type="file" className="hidden" ref={fileInput} onChange={(e) => onFileChange(e)} accept="image/*,.jpg,.jpeg,.png" />
+              <input
+                id="fileInput"
+                type="file"
+                className="hidden"
+                ref={fileInput}
+                onChange={(e) => onFileChange(e)}
+                accept="image/*,.jpg,.jpeg,.png,.heic"
+              />
             </label>
 
             <button
@@ -165,7 +213,7 @@ export default function Home() {
 
         <div className="mt-8">
           <span className="text-sm mr-4">Accuracy</span>
-          <span className="font-bold">{accuracy ? accuracy : 0}</span>
+          <span className="font-bold">{accuracy ? accuracy : 0}%</span>
         </div>
 
         <div className="mt-8">
